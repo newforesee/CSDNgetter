@@ -57,15 +57,16 @@ class Parser(object):
             elif tag == 'pre':
                 self.pre = True
             elif tag in ['code', 'tt']:
+                language = 'scala'
                 if self.pre:
                     if not 'class' in soup.attrs:
                         language = 'bash'  # default language
                     else:
-                        for name in ['cpp', 'bash', 'python', 'java']:
+                        for name in ['cpp', 'bash', 'python', 'java', 'scala']:
                             if name in ' '.join(list(soup.attrs['class'])): # <code class="prism language-cpp">
                                 language = name
                     soup.contents.insert(0, NavigableString('\n```{}\n'.format(language)))
-                    soup.contents.append(NavigableString('```\n'))
+                    soup.contents.append(NavigableString('\n```\n'))
                     self.pre = False  # assume the contents of <pre> contain only one <code>
                 else:
                     soup.contents.insert(0, NavigableString('`'))
@@ -92,26 +93,26 @@ class Parser(object):
                 soup.contents.insert(0, NavigableString('\n'))
                 soup.contents.append(NavigableString('\n'))
             elif tag in ['li']:
-                soup.contents.insert(0, NavigableString('+ '))
+                soup.contents.insert(0, NavigableString('\n+ '))
             # elif tag == 'blockquote':
                 # soup.contents.insert(0, NavigableString('> '))
             elif tag == 'img':
                 src = soup.attrs['src']
-                # pattern = r'.*\.png'
-                pattern = r'(.*\..*\?)|(.*\.(png|jpeg|jpg))'
-                result_tuple = re.findall(pattern, src)[0]
-                if result_tuple[0]:
-                    img_file = result_tuple[0].split('/')[-1].rstrip('?')
-                else:
-                    img_file = result_tuple[1].split('/')[-1].rstrip('?')
+                # pattern = r'.*/'
+                # # pattern = r'(.*\..*\?)|(.*\.(png|jpeg|jpg))'
+                # result_tuple = re.findall(pattern, src)[0]
+                # if result_tuple[0]:
+                #     img_file = result_tuple[0].split('/')[-1].rstrip('?')
+                # else:
+                img_file = src
                 # img_file = re.findall(pattern, src)[0][0].split('/')[-1].rstrip('?') ## e.g. https://img-blog.csdnimg.cn/20200228210146931.png?
-                img_file = join(self.fig_dir, img_file)
-                download_img_cmd = 'aria2c --file-allocation=none -c -x 10 -s 10 -o {} {}'.format(img_file, src)
-                if not exists(img_file):
-                    os.system(download_img_cmd)
+                # img_file = join(self.fig_dir, img_file)
+                # download_img_cmd = 'aria2c --file-allocation=none -c -x 10 -s 10 -o {} {}'.format(img_file, src)
+                # if not exists(img_file):
+                    # os.system(download_img_cmd)
                 # soup.attrs['src'] = img_file
                 # self.outputs.append('\n' + str(soup.parent) + '\n')
-                code = '![{}]({})'.format(img_file, img_file)
+                code = '![{}]({})'.format('./'+img_file, img_file)
                 self.outputs.append('\n' + code + '\n')
                 return
         if not hasattr(soup, 'children'): return

@@ -118,7 +118,7 @@ def download_csdn_category_url(category_url, md_dir, start_page=1, page_num=100,
                 article_title.append(title)
 
     for idx, (url, title) in enumerate(zip(article_url, article_title), 1):
-        md_file = join(md_dir, title + '.md')
+        md_file = join(md_dir, title.replace('/','') + '.md')
         print('BlogNum: {}, Exporting Markdown File To {}'.format(idx, md_file))
         if not exists(md_file):
             html2md(url, md_file)
@@ -133,7 +133,7 @@ def download_csdn_single_page(details_url, md_dir, with_title=True, pdf_dir='pdf
     soup = BeautifulSoup(response.content, 'html.parser', from_encoding="utf-8")
     title = soup.find_all('h1', {'class': 'title-article'})[0].string  ## 使用 html 的 title 作为 md 文件名
     title = '_'.join(title.replace('*', '').strip().split())
-    md_file = join(md_dir, title + '.md')
+    md_file = join(md_dir, title.replace('/','') + '.md')
     print('Export Markdown File To {}'.format(md_file))
     html2md(details_url, md_file, with_title=with_title)
     if to_pdf:

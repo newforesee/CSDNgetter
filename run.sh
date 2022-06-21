@@ -9,6 +9,7 @@ set +x
 download_category=false  ## 如果为 true, 就需要指定 catetory 的 url; 否则需要指定文章的 url
 category_url='https://blog.csdn.net/Eric_1993/category_9545994.html'
 article_url='https://blog.csdn.net/eric_1993/article/details/102907104'
+#article_url='https://blog.csdn.net/lovehuangjiaju/article/details/47176829'
 start_page=1
 page_num=100
 markdown_dir='markdown'
@@ -23,7 +24,7 @@ if ${download_category}; then
         --pdf_dir ${pdf_dir} \
         --combine_together \
         --to_pdf \
-        #--with_title \
+        --with_title \
         #--rm_cache \ ## dangerous option, remove all caches
 else
     python -u main.py \
@@ -31,7 +32,7 @@ else
         --markdown_dir ${markdown_dir} \
         --pdf_dir ${pdf_dir} \
         --to_pdf \
-        #--with_title \
+        --with_title \
         #--rm_cache \ ## dangerous option, remove all caches
         #--combine_together \
 fi
