@@ -5,7 +5,7 @@
 # Date: 2020-03-07
 #############################
 
-set +x
+
 download_category=false  ## 如果为 true, 就需要指定 catetory 的 url; 否则需要指定文章的 url
 category_url='https://blog.csdn.net/Eric_1993/category_9545994.html'
 article_url='https://blog.csdn.net/eric_1993/article/details/102907104'
